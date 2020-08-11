@@ -1,7 +1,11 @@
 from typing import List
 
 
+# https://leetcode.com/problems/generate-parentheses
+
 class Solution:
+    # More of a brute force with memoization approach. We basically generate all the possibilities and memoize,
+    # that way we reduce out search space.
     def __init__(self):
         self.solution = set()
         self.memoize = {}
@@ -56,8 +60,28 @@ class Solution:
 
         return
 
+    # this is a simpler backtracking.
+    # we utilise the constraint property that we need to place a left bracket before we place the right one
+    def generateParenthesisBacktracking(self, n: int):
+        # choice: place ( or
+        # constraint: we cannot close before we open.
+        # n*2 placements
+        solution = []
+
+        def backtracking(option: str, left: int, right: int):
+            if len(option) == n * 2:
+                solution.append(option)
+            if left > 0:
+                backtracking(option + "(", left - 1, right)
+
+            if right > left:
+                backtracking(option + ")", left, right - 1)
+
+        backtracking("", n, n)
+        return solution
+
 
 if __name__ == "__main__":
     from pprint import pprint
 
-    pprint(Solution().generateParenthesis(6))
+    pprint(Solution().generateParenthesisBacktracking(3))
